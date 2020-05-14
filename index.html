@@ -10,36 +10,35 @@
     miro.onReady(() => {
         miro.initialize({
             extensionPoints: {
-                getWidgetMenuItems: (widgets) => {
-                    return Promise.resolve({
-                        tooltip: 'Underline',
-                        svgIcon: underlineIcon,
-                        onClick: (widgets) => {
-                            let widget = miro.board.selection.get();
-                            underline(widget)
-                        }
-
-                    })
+                getWidgetMenuItems: async (widgets) => {
+                    if (widgets[0]['type'] == 'STICKER') {
+                      return Promise.resolve({
+                          tooltip: 'Underline',
+                          svgIcon: underlineIcon,
+                          onClick: async () => {
+                              underline()
+                          }
+                      })
+                    }
                 }
             }
         })
     })
-    function underline(widget) {
-        widget.then(function(result) {
-            console.log(result[0]);
-            var textEdit = result[0]['text'];
-            if (textEdit.includes("<u>")) {
-                textEdit = textEdit.replace("<u>", "").replace("</u>", "");
-            } else {
-                textEdit = "<u>" + textEdit + "</u>"
-            }
-            miro.board.widgets.update({
-                id: result[0]['id'],
-                text: textEdit
-            })
-        });
-      }
-    }
+
+    async function underline() {
+        let result = await miro.board.selection.get();
+        console.log(result[0]);
+        var textEdit = result[0]['text'];
+        if (textEdit.includes("<u>")) {
+            textEdit = textEdit.replace("<u>", "").replace("</u>", "");
+        } else {
+            textEdit = "<u>" + textEdit + "</u>"
+        }
+        miro.board.widgets.update({
+            id: result[0]['id'],
+            text: textEdit
+        })
+  }
 
     </script>
 </head>
