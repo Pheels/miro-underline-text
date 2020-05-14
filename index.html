@@ -16,17 +16,19 @@
                           tooltip: 'Underline',
                           svgIcon: underlineIcon,
                           onClick: async () => {
-                              underline()
+                              underline(widgets) // added the widgets as parameter
                           }
                       })
                     }
+                    return Promise.resolve([{}]); // if there is no sticker selected
                 }
             }
         })
     })
 
-    async function underline() {
-        let result = await miro.board.selection.get();
+    async function underline(widgets) { // accept widgets as parameter, work on te
+        //let result = await miro.board.selection.get();
+        let result = widgets;
         console.log(result[0]);
         var textEdit = result[0]['text'];
         if (textEdit.includes("<u>")) {
